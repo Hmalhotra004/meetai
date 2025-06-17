@@ -1,4 +1,14 @@
 "use client";
+import { useState } from "react";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { OctagonAlertIcon } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { FaGithub, FaGoogle } from "react-icons/fa";
+import { z } from "zod";
+
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,13 +22,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { OctagonAlertIcon } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import Image from "next/image";
 
 const formSchema = z
   .object({
@@ -33,9 +37,10 @@ const formSchema = z
   });
 
 const SignUpPage = () => {
-  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -59,8 +64,28 @@ const SignUpPage = () => {
       },
       {
         onSuccess: () => {
-          router.push("/");
+          router.replace("/");
         },
+        onError: ({ error }) => {
+          setError(error.message);
+        },
+        onResponse: () => {
+          setPending(false);
+        },
+      }
+    );
+  }
+
+  function onSocial(provider: "google" | "github") {
+    setError(null);
+    setPending(true);
+
+    authClient.signIn.social(
+      {
+        provider: provider,
+        callbackURL: "/",
+      },
+      {
         onError: ({ error }) => {
           setError(error.message);
         },
@@ -193,23 +218,25 @@ const SignUpPage = () => {
                     variant="outline"
                     type="button"
                     className="w-full"
+                    onClick={() => onSocial("google")}
                   >
-                    Google
+                    <FaGoogle />
                   </Button>
                   <Button
                     disabled={pending}
                     variant="outline"
                     type="button"
                     className="w-full"
+                    onClick={() => onSocial("github")}
                   >
-                    Google
+                    <FaGithub />
                   </Button>
                 </div>
 
                 <div className="text-center text-sm">
                   Already have an account?{" "}
                   <Link
-                    href="/sign-up"
+                    href="/sign-in"
                     className="underline underline-offset-4"
                   >
                     Sign in
@@ -220,10 +247,11 @@ const SignUpPage = () => {
           </Form>
 
           <div className="bg-radial from-green-700 to-green-900 relative hidden md:flex flex-col gap-y-4 items-center justify-center">
-            <img
+            <Image
               src="/logo.svg"
               alt="logo"
-              className="h-[92px] w-[92px]"
+              width={92}
+              height={92}
             />
             <p className="text-2xl font-semibold text-white">Meet.AI</p>
           </div>
