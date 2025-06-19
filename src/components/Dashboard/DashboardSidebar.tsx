@@ -1,6 +1,6 @@
 "use client";
 
-import DashboardUserButton from "@/components/DashboardUserButton";
+import DashboardUserButton from "@/components/Dashboard/DashboardUserButton";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { BotIcon, StarIcon, VideoIcon } from "lucide-react";

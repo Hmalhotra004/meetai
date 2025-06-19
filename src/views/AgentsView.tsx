@@ -1,6 +1,6 @@
 "use client";
-import Loader from "@/components/Loader";
-import ServerError from "@/components/ServerError";
+import Loader from "@/components/fallbacks/Loader";
+import ServerError from "@/components/fallbacks/ServerError";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 

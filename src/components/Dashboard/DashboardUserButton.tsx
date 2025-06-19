@@ -23,7 +23,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { authClient } from "@/lib/auth-client";
 
 import GeneratedAvatar from "@/components/GeneratedAvatar";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 const DashboardUserButton = () => {
   const router = useRouter();
