@@ -1,5 +1,5 @@
-import Home from "@/components/home/Home";
 import { auth } from "@/lib/auth";
+import HomeView from "@/views/HomeView";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -12,7 +12,7 @@ const Homepage = async () => {
     redirect("/sign-in");
   }
 
-  return <Home />;
+  return <HomeView />;
 };
 
 export default Homepage;
