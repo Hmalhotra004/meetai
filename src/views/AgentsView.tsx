@@ -1,4 +1,7 @@
 "use client";
+import { columns } from "@/components/agents/Columns";
+import { DataTable } from "@/components/agents/DataTable";
+import EmptyState from "@/components/fallbacks/EmptyState";
 import Loader from "@/components/fallbacks/Loader";
 import ServerError from "@/components/fallbacks/ServerError";
 import { useTRPC } from "@/trpc/client";
@@ -10,8 +13,17 @@ const AgentsView = () => {
   const { data } = useSuspenseQuery(trpc.agents.getMany.queryOptions());
 
   return (
-    <div>
-      <h1>{JSON.stringify(data, null, 2)}</h1>
+    <div className="flex-1 pb-4 px-4 md:px-8 flex flex-col gap-y-4">
+      <DataTable
+        columns={columns}
+        data={data}
+      />
+      {data.length === 0 && (
+        <EmptyState
+          title="Create your first agent"
+          description="Create an agent to join meetings. Each agent will follow your instructions."
+        />
+      )}
     </div>
   );
 };
