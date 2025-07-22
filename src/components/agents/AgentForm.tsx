@@ -8,7 +8,6 @@ import { useTRPC } from "@/trpc/client";
 import { AgentGetOne } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -21,6 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { DEFAULT_PAGE } from "@/constants";
 
 interface AgentFormProps {
   onSuccess?: () => void;
@@ -30,13 +30,14 @@ interface AgentFormProps {
 
 const AgentForm = ({ initialValues, onSuccess, onCancel }: AgentFormProps) => {
   const trpc = useTRPC();
-  const router = useRouter();
   const queryClient = useQueryClient();
 
   const createAgent = useMutation(
     trpc.agents.create.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions());
+        await queryClient.invalidateQueries(
+          trpc.agents.getMany.queryOptions({ search: "", page: DEFAULT_PAGE })
+        );
 
         if (initialValues?.id) {
           await queryClient.invalidateQueries(
