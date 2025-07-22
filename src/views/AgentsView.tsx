@@ -8,11 +8,13 @@ import ServerError from "@/components/fallbacks/ServerError";
 import { useAgentsFilters } from "@/hooks/useAgentsFilters";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 const AgentsView = () => {
   const [filters, setFilters] = useAgentsFilters();
 
   const trpc = useTRPC();
+  const router = useRouter();
 
   const { data } = useSuspenseQuery(
     trpc.agents.getMany.queryOptions({ ...filters })
@@ -23,7 +25,9 @@ const AgentsView = () => {
       <DataTable
         columns={columns}
         data={data.items}
+        onRowClick={(row) => router.push(`/agents/${row.id}`)}
       />
+
       <DataPagination
         page={filters.page}
         totalPages={data.totalPages}
