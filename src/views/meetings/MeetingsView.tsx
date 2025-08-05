@@ -12,7 +12,7 @@ const MeetingsView = () => {
     trpc.meetings.getMany.queryOptions({ search: "" })
   );
 
-  return <div>{JSON.stringify(data)}</div>;
+  return <div>data</div>;
 };
 
 export default MeetingsView;
