@@ -19,7 +19,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { DEFAULT_PAGE } from "@/constants";
 import { useState } from "react";
 import CommandSelect from "../CommandSelect";
 import GeneratedAvatar from "../GeneratedAvatar";
@@ -50,7 +49,7 @@ const MeetingForm = ({
     trpc.meetings.create.mutationOptions({
       onSuccess: async (data) => {
         await queryClient.invalidateQueries(
-          trpc.meetings.getMany.queryOptions({ search: "", page: DEFAULT_PAGE })
+          trpc.meetings.getMany.queryOptions({ search: "" })
         );
 
         onSuccess?.(data.id);
