@@ -1,7 +1,7 @@
 "use client";
 import { columns } from "@/components/agents/Columns";
-import { DataTable } from "@/components/DataTable";
 import DataPagination from "@/components/DataPagination";
+import { DataTable } from "@/components/DataTable";
 import EmptyState from "@/components/fallbacks/EmptyState";
 import Loader from "@/components/fallbacks/Loader";
 import ServerError from "@/components/fallbacks/ServerError";

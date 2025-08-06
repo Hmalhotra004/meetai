@@ -1,18 +1,25 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { DEFAULT_PAGE } from "@/constants";
+import { useMeetingsFilters } from "@/hooks/useMeetingsFilters";
+import { PlusIcon, XCircleIcon } from "lucide-react";
 import { useState } from "react";
+import AgentIdFilter from "./AgentIdFilter";
+import MeetingsSearchFilter from "./MeetingsSearchFilter";
+import MeetingStatusFilter from "./MeetingStatusFilter";
 import NewMeetingDialog from "./NewMeetingDialog";
 
 const MeetingsListHeader = () => {
   const [open, setOpen] = useState(false);
-  // const [filters, setFilters] = useAgentsFilters();
+  const [filters, setFilters] = useMeetingsFilters();
 
-  // const isAnyFilterModified = !!filters.search;
+  const isAnyFilterModified =
+    !!filters.search || !!filters.status || !!filters.agentId;
 
-  // const onClearFilters = () => {
-  //   setFilters({ search: "", page: DEFAULT_PAGE });
-  // };
+  const onClearFilters = () => {
+    setFilters({ search: "", page: DEFAULT_PAGE, agentId: "", status: null });
+  };
 
   return (
     <>
@@ -29,19 +36,24 @@ const MeetingsListHeader = () => {
           </Button>
         </div>
 
-        <div className="flex items-center gap-x-2 p-1">
-          {/* <AgentsSearchFilter /> */}
-          {/* {isAnyFilterModified && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onClearFilters}
-            >
-              <XCircleIcon />
-              Clear
-            </Button>
-          )} */}
-        </div>
+        <ScrollArea>
+          <div className="flex items-center gap-x-2 p-1">
+            <MeetingsSearchFilter />
+            <MeetingStatusFilter />
+            <AgentIdFilter />
+            {isAnyFilterModified && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onClearFilters}
+              >
+                <XCircleIcon />
+                Clear
+              </Button>
+            )}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </div>
     </>
   );

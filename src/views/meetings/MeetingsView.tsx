@@ -1,18 +1,23 @@
 "use client";
 
+import DataPagination from "@/components/DataPagination";
 import { DataTable } from "@/components/DataTable";
 import EmptyState from "@/components/fallbacks/EmptyState";
 import Loader from "@/components/fallbacks/Loader";
 import ServerError from "@/components/fallbacks/ServerError";
 import { columns } from "@/components/meetings/Columns";
+import { useMeetingsFilters } from "@/hooks/useMeetingsFilters";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 const MeetingsView = () => {
   const trpc = useTRPC();
+  const router = useRouter();
+  const [filters, setFilters] = useMeetingsFilters();
 
   const { data } = useSuspenseQuery(
-    trpc.meetings.getMany.queryOptions({ search: "" })
+    trpc.meetings.getMany.queryOptions({ ...filters })
   );
 
   return (
@@ -20,7 +25,15 @@ const MeetingsView = () => {
       <DataTable
         data={data.items}
         columns={columns}
+        onRowClick={(row) => router.push(`/meetings/${row.id}`)}
       />
+
+      <DataPagination
+        page={filters.page}
+        totalPages={data.totalPages}
+        onPageChange={(page) => setFilters({ page })}
+      />
+
       {data.items.length === 0 && (
         <EmptyState
           title="Create your first meeting"
