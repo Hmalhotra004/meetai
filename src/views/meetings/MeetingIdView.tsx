@@ -1,6 +1,10 @@
 "use client";
+import ActiveState from "@/components/fallbacks/ActiveState";
+import CancelledState from "@/components/fallbacks/CancelledState";
 import Loader from "@/components/fallbacks/Loader";
+import ProcessingState from "@/components/fallbacks/ProcessingState";
 import ServerError from "@/components/fallbacks/ServerError";
+import UpcomingState from "@/components/fallbacks/UpcomingState";
 import MeetingIdViewHeader from "@/components/meetings/MeetingIdViewHeader";
 import UpdateMeetingDialog from "@/components/meetings/UpdateMeetingDialog";
 import { useConfirm } from "@/hooks/useConfirm";
@@ -57,6 +61,12 @@ const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
     await removedMeeting.mutateAsync({ id: meetingId });
   };
 
+  const isActive = data.status === "active";
+  const isUpcoming = data.status === "upcoming";
+  const isCancelled = data.status === "cancelled";
+  const isProcessing = data.status === "processing";
+  const isCompleted = data.status === "completed";
+
   return (
     <>
       <RemoveConfirmation />
@@ -73,32 +83,22 @@ const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
           onEdit={() => setUpdateMeetingDialogOpen(true)}
           onDelete={handleRemoveMeeting}
         />
-        {/* 
 
-        <div className="bg-white rounded-lg border">
-          <div className="px-4 py-5 gap-y-5 flex flex-col col-span-5">
-            <div className="flex items-center gap-x-3">
-              <GeneratedAvatar
-                variant="botttsNeutral"
-                seed={data.name}
-                className="size-10"
-              />
-              <h2 className="text-2xl font-medium">{data.name}</h2>
-            </div>
-            <Badge
-              variant="outline"
-              className="flex items-center gap-x-2 [&>svg]:size-4"
-            >
-              <VideoIcon className="text-blue-700" />
-              {data.meetingCount}{" "}
-              {data.meetingCount === 1 ? "Meeting" : "Meetings"}
-            </Badge>
-            <div className="flex flex-col gap-y-4">
-              <p className="text-lg font-medium">Instructions</p>
-              <p className="text-neutral-800">{data.instructions}</p>
-            </div>
-          </div>
-        </div> */}
+        {isActive && <ActiveState meetingId={data.id} />}
+
+        {isUpcoming && (
+          <UpcomingState
+            meetingId={data.id}
+            isCanceling={false}
+            onCancelMeeting={() => {}}
+          />
+        )}
+
+        {isCancelled && <CancelledState />}
+
+        {isProcessing && <ProcessingState />}
+
+        {isCompleted && <div>Com</div>}
       </div>
     </>
   );
