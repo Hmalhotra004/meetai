@@ -1,6 +1,7 @@
 "use client";
 import ActiveState from "@/components/fallbacks/ActiveState";
 import CancelledState from "@/components/fallbacks/CancelledState";
+import CompletedState from "@/components/fallbacks/CompletedState";
 import Loader from "@/components/fallbacks/Loader";
 import ProcessingState from "@/components/fallbacks/ProcessingState";
 import ServerError from "@/components/fallbacks/ServerError";
@@ -98,7 +99,7 @@ const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
 
         {isProcessing && <ProcessingState />}
 
-        {isCompleted && <div>Com</div>}
+        {isCompleted && <CompletedState data={data} />}
       </div>
     </>
   );
