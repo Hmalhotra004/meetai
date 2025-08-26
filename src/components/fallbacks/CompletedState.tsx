@@ -1,4 +1,5 @@
 import GeneratedAvatar from "@/components/GeneratedAvatar";
+import Transcript from "@/components/meetings/Transcript";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -15,6 +16,7 @@ import {
   FileVideoIcon,
   SparklesIcon,
 } from "lucide-react";
+import ChatProvider from "../meetings/ChatProvider";
 
 interface Props {
   data: MeetingGetOne;
@@ -70,8 +72,8 @@ const CompletedState = ({ data }: Props) => {
 
         {/* summary */}
         <TabsContent value="summary">
-          <div className="bg-white rounded-lg border">
-            <div className="px-4 py-5 gap-y-5 flex flex-col col-span-5">
+          <ScrollArea className="h-[calc(100vh-210px)] bg-white rounded-lg border">
+            <div className="px-4 pt-5 pb-2 gap-y-5 flex flex-col ">
               <h2 className="text-2xl font-medium capitalize">{data.name}</h2>
 
               <div className="flex gap-x-2 items-center">
@@ -177,28 +179,36 @@ const CompletedState = ({ data }: Props) => {
                 </Markdown>
               </div>
             </div>
-          </div>
+            <ScrollBar orientation="vertical" />
+          </ScrollArea>
         </TabsContent>
 
         {/* transcript */}
         <TabsContent value="transcript">
-          <div className="bg-white rounded-lg border px-4 py-5">tatti</div>
+          <Transcript meetingId={data.id} />
         </TabsContent>
 
         {/* recording */}
         <TabsContent value="recording">
           <div className="bg-white rounded-lg border px-4 py-5">
-            <video
-              src={data.recordingUrl!}
-              className="w-full rounded-lg"
-              controls
-            />
+            {data.recordingUrl ? (
+              <video
+                src={data.recordingUrl}
+                className="w-full rounded-lg"
+                controls
+              />
+            ) : (
+              <h1>No Recording available </h1>
+            )}
           </div>
         </TabsContent>
 
         {/* chat */}
         <TabsContent value="chat">
-          <div className="bg-white rounded-lg border px-4 py-5">chat</div>
+          <ChatProvider
+            meetingId={data.id}
+            meetingName={data.name}
+          />
         </TabsContent>
       </Tabs>
     </div>
