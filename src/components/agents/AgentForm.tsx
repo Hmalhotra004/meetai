@@ -3,11 +3,13 @@ import GeneratedAvatar from "@/components/GeneratedAvatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { DEFAULT_PAGE } from "@/constants";
 import { agentsInsertSchema } from "@/procedures/schemas";
 import { useTRPC } from "@/trpc/client";
 import { AgentGetOne } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -20,7 +22,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { DEFAULT_PAGE } from "@/constants";
 
 interface AgentFormProps {
   onSuccess?: () => void;
@@ -31,6 +32,7 @@ interface AgentFormProps {
 const AgentForm = ({ initialValues, onSuccess, onCancel }: AgentFormProps) => {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const createAgent = useMutation(
     trpc.agents.create.mutationOptions({
@@ -39,10 +41,18 @@ const AgentForm = ({ initialValues, onSuccess, onCancel }: AgentFormProps) => {
           trpc.agents.getMany.queryOptions({ search: "", page: DEFAULT_PAGE })
         );
 
+        await queryClient.invalidateQueries(
+          trpc.premium.getFreeUsage.queryOptions()
+        );
+
         onSuccess?.();
       },
       onError: (error) => {
         toast.error(error.message);
+
+        if (error.data?.code === "FORBIDDEN") {
+          router.push("/upgrade");
+        }
       },
     })
   );

@@ -38,7 +38,10 @@ const AgentIdView = ({ agentId }: AgentIdViewProps) => {
         await queryClient.invalidateQueries(
           trpc.agents.getMany.queryOptions({ search: "" })
         );
-        // TODO:invalidate free tier
+
+        await queryClient.invalidateQueries(
+          trpc.premium.getFreeUsage.queryOptions()
+        );
         router.push("/agents");
       },
       onError: (error) => {

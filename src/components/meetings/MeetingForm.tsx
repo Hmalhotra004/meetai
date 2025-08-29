@@ -19,6 +19,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import CommandSelect from "../CommandSelect";
 import GeneratedAvatar from "../GeneratedAvatar";
@@ -40,6 +41,7 @@ const MeetingForm = ({
 
   const trpc = useTRPC();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const agents = useQuery(
     trpc.agents.getMany.queryOptions({ search: agentSearch, pageSize: 100 })
@@ -52,10 +54,18 @@ const MeetingForm = ({
           trpc.meetings.getMany.queryOptions({ search: "" })
         );
 
+        await queryClient.invalidateQueries(
+          trpc.premium.getFreeUsage.queryOptions()
+        );
+
         onSuccess?.(data.id);
       },
       onError: (error) => {
         toast.error(error.message);
+
+        if (error.data?.code === "FORBIDDEN") {
+          router.push("/upgrade");
+        }
       },
     })
   );

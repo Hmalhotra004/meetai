@@ -41,6 +41,10 @@ const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
           trpc.meetings.getMany.queryOptions({ search: "" })
         );
 
+        await queryClient.invalidateQueries(
+          trpc.premium.getFreeUsage.queryOptions()
+        );
+
         router.push("/meetings");
       },
       onError: (error) => {
