@@ -1,4 +1,8 @@
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { ChevronsUpDownIcon } from "lucide-react";
+import { ReactNode, useState } from "react";
+
 import {
   CommandEmpty,
   CommandInput,
@@ -6,9 +10,6 @@ import {
   CommandList,
   CommandResponsiveDialog,
 } from "@/components/ui/command";
-import { cn } from "@/lib/utils";
-import { ChevronsUpDownIcon } from "lucide-react";
-import { ReactNode, useState } from "react";
 
 interface Props {
   options: Array<{
@@ -32,7 +33,7 @@ const CommandSelect = ({
   onSearch,
   value,
   classname,
-  isSearchable,
+  // isSearchable,
   placeholder = "Select and option",
 }: Props) => {
   const [open, setOpen] = useState(false);

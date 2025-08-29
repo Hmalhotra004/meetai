@@ -91,13 +91,7 @@ const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
 
         {isActive && <ActiveState meetingId={data.id} />}
 
-        {isUpcoming && (
-          <UpcomingState
-            meetingId={data.id}
-            isCanceling={false}
-            onCancelMeeting={() => {}}
-          />
-        )}
+        {isUpcoming && <UpcomingState meetingId={data.id} />}
 
         {isCancelled && <CancelledState />}
 
