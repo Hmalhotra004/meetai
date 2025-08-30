@@ -16,7 +16,6 @@ import {
   FileVideoIcon,
   SparklesIcon,
 } from "lucide-react";
-import ChatProvider from "../meetings/ChatProvider";
 
 interface Props {
   data: MeetingGetOne;
@@ -38,11 +37,11 @@ const tabs = [
     icon: FileVideoIcon,
     text: "Recording",
   },
-  {
-    value: "chat",
-    icon: SparklesIcon,
-    text: "Ask AI",
-  },
+  // {
+  //   value: "chat",
+  //   icon: SparklesIcon,
+  //   text: "Ask AI",
+  // },
 ];
 
 const CompletedState = ({ data }: Props) => {
@@ -204,12 +203,12 @@ const CompletedState = ({ data }: Props) => {
         </TabsContent>
 
         {/* chat */}
-        <TabsContent value="chat">
+        {/* <TabsContent value="chat">
           <ChatProvider
             meetingId={data.id}
             meetingName={data.name}
           />
-        </TabsContent>
+        </TabsContent> */}
       </Tabs>
     </div>
   );
