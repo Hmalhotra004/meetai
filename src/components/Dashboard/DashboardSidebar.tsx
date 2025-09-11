@@ -49,7 +49,7 @@ const DashboardSidebar = () => {
     <Sidebar>
       <SidebarHeader className="text-sidebar-accent-foreground">
         <Link
-          href="/"
+          href="/meetings"
           className="flex items-center gap-2 px-2 pt-2"
         >
           <Image

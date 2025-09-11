@@ -10,6 +10,8 @@ const Homepage = async () => {
 
   if (!session) {
     redirect("/sign-in");
+  } else {
+    redirect("/meetings");
   }
 
   return <HomeView />;
