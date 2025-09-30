@@ -71,7 +71,7 @@ const CompletedState = ({ data }: Props) => {
 
         {/* summary */}
         <TabsContent value="summary">
-          <ScrollArea className="h-[calc(100vh-210px)] bg-white rounded-lg border">
+          <ScrollArea className="h-[calc(100vh-215px)] bg-white rounded-lg border">
             <div className="px-4 pt-5 pb-2 gap-y-5 flex flex-col ">
               <h2 className="text-2xl font-medium capitalize">{data.name}</h2>
 

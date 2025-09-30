@@ -37,20 +37,28 @@ const CallConnect = ({
   const [client, setClient] = useState<StreamVideoClient>();
 
   useEffect(() => {
-    const _client = new StreamVideoClient({
-      apiKey: process.env.NEXT_PUBLIC_STREAM_VIDEO_API_KEY!,
-      user: {
-        id: userId,
-        name: userName,
-        image: userImage,
-      },
-      tokenProvider: generateToken,
-    });
+    let active = true;
 
-    setClient(_client);
+    (async () => {
+      const token = await generateToken(); // call once
+      if (!active) return;
+
+      const _client = new StreamVideoClient({
+        apiKey: process.env.NEXT_PUBLIC_STREAM_VIDEO_API_KEY!,
+        user: {
+          id: userId,
+          name: userName,
+          image: userImage,
+        },
+        token,
+      });
+
+      setClient(_client);
+    })();
 
     return () => {
-      _client.disconnectUser();
+      active = false;
+      client?.disconnectUser();
       setClient(undefined);
     };
   }, [generateToken, userId, userImage, userName]);
